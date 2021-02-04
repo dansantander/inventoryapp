@@ -1,9 +1,10 @@
 var createError = require('http-errors');
 var express = require('express');
+require('dotenv').config();
 
 //Set up mongoose connection
 var mongoose = require('mongoose');
-var mongoDB = `mongodb+srv://dansantander:${process.env.DB_PASSWORD}@traversymedia.e1juq.mongodb.net/inventoryapp?retryWrites=true&w=majority`
+var mongoDB = `mongodb+srv://dansantander:${process.env.DB_PASSWORD}@traversymedia.e1juq.mongodb.net/inventoryapp?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -14,6 +15,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var catalogRouter = require('./routes/catalog');  //Import routes for "catalog" area of site
 
 var app = express();
 
@@ -29,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/catalog', catalogRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
