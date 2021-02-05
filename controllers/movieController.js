@@ -1,7 +1,19 @@
 var Movie = require('../models/movie');
+var Genre = require('../models/genre');
+
+var async = require('async');
 
 exports.index = function(req, res) {
-  res.send('NOT IMPLEMENTED: Site Home Page');
+  async.parallel({
+      movie_count: function(callback) {
+          Movie.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+      },
+      genre_count: function(callback) {
+        Movie.countDocuments({}, callback);
+      }
+  }, function(err, results) {
+      res.render('index', { title: 'Movie Site Home', error: err, data: results });
+  });
 };
 
 // Display list of all Movies.
