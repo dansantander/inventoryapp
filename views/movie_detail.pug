@@ -1,0 +1,13 @@
+
+extends layout
+
+block content
+  h1 #{movie.title}
+  p #[strong Description:] #{movie.description}
+  p #[strong Genres: ]
+          each val, index in movie.genre
+            a(href=val.url) #{val.name}
+              if index < movie.genre.length - 1
+                |,
+  p #[strong Price:] #{movie.price}
+  p #[strong In Stock:] #{movie.inStock}

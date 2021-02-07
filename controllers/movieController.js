@@ -18,12 +18,30 @@ exports.index = function(req, res) {
 
 // Display list of all Movies.
 exports.movie_list = function(req, res) {
-  res.send('NOT IMPLEMENTED: Movie list');
+  
+  Movie.find({}, 'title')
+  .populate('genre')
+  .exec(function (err, list_movies) {
+    if (err) { return next(err); }
+    res.render('movie_list', { title: 'Movie List', movie_list: list_movies})
+  })
 };
 
 // Display detail page for a specific Movie.
-exports.movie_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: Movie detail: ' + req.params.id);
+exports.movie_detail = function(req, res, next) {
+
+  Movie.findById(req.params.id)
+    .populate('genre')
+    .exec(function (err, movie_detail ) {
+      if (err) { return next(err); }
+      if (movie_detail==null) { // No results.
+        var err = new Error('Movie copy not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('movie_detail', { movie:  movie_detail});
+    });
+
 };
 
 // Display Movie create form on GET.

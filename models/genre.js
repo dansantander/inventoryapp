@@ -10,7 +10,7 @@ var GenreSchema = new Schema(
 
 //Virtual for URL
 GenreSchema.virtual("url").get(function () {
-  return "/genre/" + this._id;
+  return "/catalog/genre/" + this._id;
 });
 
 //Export model
